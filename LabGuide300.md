@@ -8,7 +8,7 @@ SQL Developer makes this a very easy process to load external files through a gr
 
 Prior to loading our **Inc.com** datasets we cleaned up all of our headers in Excel or a text editor. 
 
-To load data into our existing database we'll use the Web import from file feature in the **Data Loading** tab.
+To load data into our database we'll use the Web import from file feature in the **Data Loading** tab.
 
 The file formats that you can upload are CSV, XLS, XLSX, TSV and TXT.
 
@@ -16,13 +16,49 @@ To upload data from local files to an new table with SQL Developer Web, do the f
 
 1. Click on the **Data Loading** 
 
-2. If this is your first upload you will see a pane allowing you to **Drag and drop** your file or **Select files**. Once you've performed your first upload you will need to click on the **Upload Data** icon designated by a cloud with an up arrow. Select whatever file you would like to upload and click **Next**.
+2. If this is your first upload you will see a pane allowing you to **Drag and drop** your file or **Select files**. Once you've performed your first upload you will need to click on the **Upload Data** icon designated by a cloud with an up arrow. Select or drag and drop the file you would like to upload. 
 
-3. You will now be presented with the **Table definition** page. Here you will specify the **Schema** where the table should be stored and the **Table Name**. You will also specify/update data types, new column names, and other parameters. For now we will just update necessary column names and data types the nclick **Next**.
+<figure>
+    <img src="images/300/1_Data_Loading.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 1<figcaption>
+</figure>
 
-4. You will now be presented with a preview of the column mapping. If there is a problem at this stage, information shows with more details, such as pending actions. This would typically mean you need to correct or fix the source file data before you import.
+3. At this point you can configure import details in the **Data Preview** and once configured click **Next**.
 
-5. Click **Finish** and the data will loaded. 
+<figure>
+    <img src="images/300/2_Data_Preview.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 2<figcaption>
+</figure>
+
+4. You will now be presented with the **Table definition** page. Here you will specify the **Schema** where the table should be stored and the **Table Name**. You will also specify/update data types, new column names, and other parameters. For now we will just update any necessary column names and data types the nclick **Next**.
+
+**Original:**
+
+<figure>
+    <img src="images/300/3_Prechange.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 3<figcaption>
+</figure>
+
+**Updated:**
+
+<figure>
+    <img src="images/300/4_Postchange.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 4<figcaption>
+</figure>
+
+5. You will now be presented with a preview of the column mapping. If there is a problem at this stage, information shows with more details, such as pending actions. This would typically mean you need to correct or fix the source file data before you import.
+
+<figure>
+    <img src="images/300/5_Review.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 5<figcaption>
+</figure>
+
+6. Click **Finish** and the data will loaded. 
+
+<figure>
+    <img src="images/300/6_Finish.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 6<figcaption>
+</figure>
 
 *Depending on the size of the data file you are importing, the import may take some time.*
 
@@ -36,11 +72,18 @@ In the Loaded data summary dialog, you can also search for files loaded by schem
 
 ## Data Cleaning
 
-Now that our data is loaded we will want to query and analyze the dataset. However, to do this there are some fields that are of the inccorect type. In particular we are going to focus on the **Revenue** field for this part of the activity.
+For this portion we will analyze the **Inc500_2019.csv** file which would have been loaded without needing to clean any column headers or change data types.
+
+With our **Inc500** data loaded we will want to query and analyze the dataset. However, to do this there are some fields that are of the inccorect type. In particular we are going to focus on the **Revenue** field for this part of the activity.
 
 When we have a column of data that should be numerical but is imported as a string we need to consider why the field was treated as a string to start.
 
 In the case of our **Revenue** column the data includes a dollar sign ($) as well as a word specifying the scale (in this case millions). To clean a column such as this to perform aggregate analyses on it we need to breakdown the conversions needed into steps.
+
+<figure>
+    <img src="images/300/7_Inc500_Rev.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 7<figcaption>
+</figure>
 
 Pay close attention to the use of parenthesis '()' when we apply and nest different functions, as it is easy to miss one and the error codes are not always helpful in determining the true cause of the error.
 
@@ -69,6 +112,11 @@ FROM
 	INC500;
 ```
 
+<figure>
+    <img src="images/300/8_Rev_Replace.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 8<figcaption>
+</figure>
+
 Notice how the dollar signs have been removed. Now lets do the same thing for the string **` million`**. Pay close attention to the space before the word **million** to ensure we remove the space as well. Also, we don't know if the word **million** is always lowercase, so we will use the **UPPER** function from preivously and remove the sring **` MILLION`**. Copy, paste, and run the followingcode.
 
 ```SQL
@@ -80,7 +128,13 @@ FROM
 	INC500;
 ```
 
-We've now successfully remove all of the unecessary string characters from the **Revenue** column. Now let's convert the column to a number we can analyze.
+<figure>
+    <img src="images/300/9_Rev_Second_Replace.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 9<figcaption>
+</figure>
+
+
+We've now successfully removed all of the unecessary string characters from the **Revenue** column. Now let's convert the column to a number we can analyze.
 
 ### Converting to a Number & Scale
 
@@ -97,6 +151,11 @@ FROM
 	INC500;
 ```
 
+<figure>
+    <img src="images/300/10_Conversion.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 10<figcaption>
+</figure>
+
 First you should noticed the **Revenue** column is now right justified, this visually means the values are being stored as number. Now all we need to do is scale the data with multiplication to match the scale previously inlucded as text.
 
 Performation a mathmatical calucation on a numerical field is very simply and only requires we add the expression to the column selection. Copy, paste, and run the following code to scale our data to millions.
@@ -110,5 +169,10 @@ FROM
 	INC500;
 ```
 
-We've now successfully loaded our INC500 data and cleaned the **Revenue** column dynamically in our query. As Admins we could update the source data, however, it is very common in business that you are provided data "as is" and you may not have the luxury of changing the source data or requesting a change be made. We can however create a view to hold this converion. However, this will be convered in a future lecture.  
+<figure>
+    <img src="images/300/11_Scaled.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 11<figcaption>
+</figure>
+
+We've now successfully loaded our **Inc500** data and cleaned the **Revenue** column dynamically in our query. As Admins we could update the source data, however, it is very common in business that you are provided data "as is" and you may not have the luxury of changing the source data or requesting a change be made. We can however create a view to hold this converion. However, this will be convered in a future lecture.  
 
