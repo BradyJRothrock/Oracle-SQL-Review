@@ -1,0 +1,28 @@
+{
+	"tutorials": [
+		{
+			"title": "Part 1: Logging into Oracle Cloud & SQL Developer Web",
+			"description": "",
+			"partnumber": "Ennnnn_01",
+			"publisheddate": "02/18/2020",
+			"contentid": "12nnnn",
+			"filename": "LabGuide100.md"
+		},
+		{
+			"title": "Part 2: SQL Basics",
+			"description": "",
+			"partnumber": "Ennnnn_01",
+			"publisheddate": "02/18/2020",
+			"contentid": "12nnnn",
+			"filename": "LabGuide200.md"
+		},
+		{
+			"title": "Part 3: Loading & Cleaning Data",
+			"description": "",
+			"partnumber": "Ennnnn_01",
+			"publisheddate": "02/18/2020",
+			"contentid": "12nnnn",
+			"filename": "LabGuide300.md"
+		}
+	]
+}
