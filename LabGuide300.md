@@ -72,13 +72,13 @@ In the Loaded data summary dialog, you can also search for files loaded by schem
 
 ## Data Cleaning
 
-For this portion we will analyze the **Inc500_2019.csv** file which would have been loaded without needing to clean any column headers or change data types.
+For this portion we will analyze the **Inc 5000** file that we just loaded and is used for our homework assignment.
 
-With our **Inc500** data loaded we will want to query and analyze the dataset. However, to do this there are some fields that are of the inccorect type. In particular we are going to focus on the **Revenue** field for this part of the activity.
+With our **Inc5000** data loaded we will want to query and analyze the dataset. However, to do this there are some fields that are of the inccorect type. In particular we are going to focus on the **Revenue** field for this part of the activity.
 
 When we have a column of data that should be numerical but is imported as a string we need to consider why the field was treated as a string to start.
 
-In the case of our **Revenue** column the data includes a dollar sign ($) as well as a word specifying the scale (in this case millions). To clean a column such as this to perform aggregate analyses on it we need to breakdown the conversions needed into steps.
+In the case of our **Revenue** column the data includes a dollar sign ($) as well as a word specifying the scale (e.g. millions). To clean a column such as this to perform aggregate analyses on it we need to breakdown the conversions needed into steps.
 
 <figure>
     <img src="images/300/7_Inc500_Rev.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
@@ -117,15 +117,15 @@ FROM
     <figcaption style="text-align:center;">Figure 8<figcaption>
 </figure>
 
-Notice how the dollar signs have been removed. Now lets do the same thing for the string **` million`**. Pay close attention to the space before the word **million** to ensure we remove the space as well. Also, we don't know if the word **million** is always lowercase, so we will use the **UPPER** function from preivously and remove the sring **` MILLION`**. Copy, paste, and run the followingcode.
+Notice how the dollar signs have been removed. Now lets do the same thing for the string **` million`**. Pay close attention to the space before the word **million** to ensure we remove the space as well. Also, we don't know if the word **million** is always lowercase, so we will use the **UPPER** function from preivously and remove the string **` MILLION`**. Copy, paste, and run the followingcode.
 
 ```SQL
 SELECT
 	RANK,
-	COMPANY,
+	NAME,
 	REPLACE(REPLACE(UPPER(REVENUE), '$'), ' MILLION') as REVENUE
 FROM 
-	INC500;
+	INC5000;
 ```
 
 <figure>
@@ -134,7 +134,50 @@ FROM
 </figure>
 
 
-We've now successfully removed all of the unecessary string characters from the **Revenue** column. Now let's convert the column to a number we can analyze.
+Have we successfully removed all of the unecessary string characters from the **Revenue** column? 
+	    
+If we click on the arrow in the **Revenue** column to sort the column we quickly see that we have values with **Billion** in them as well.
+	    
+This is problemsome. We can add another `REPLACE()` function to remove **` BILLION`**, however, we won't be able to identify which rows need to be multiplied by **1,000,000** or **1,000,000,000**.
+	    
+To handle this we need what is called a **Case** statement, or as I like to refer to it **Case When Then Else End** statement.
+	    
+### Case Statements
+	    
+Case statements work similar to **IFS()** statements in Excel and **For Loops** in R & Python. 
+	    
+The **Case** statement aptly begins with the word **CASE**. It is then follow by **WHEN**, the condition to be checked, **THEN**, & finally the value to return if the condition is true.
+	    
+A new function we will use here is called **INSTR()** which stands for **In String**. The function returns the count of how many times the search string appears in the specificed field. Therefore, if we search for **'M'** the value returns **1** when the word **Million** is found and **0** for **Billion**.
+	    
+We then compare the resulting value to **0** similar to a where statement so that it returns **TRUE** when the count of the search string is greater than **0**. This is one of many ways to accomplish this task, but is considered the simpliest.
+	    
+When the condition of the **WHEN** statement resolves **TRUE** we then execute the code following **THEN** for the evaluated row. In this case we can use a single **REPLACE()** function for each **THEN** statement replacing **' MILLION"** or **' BILLION'** depending on which **WHEN** statement resolves **TRUE**.
+	    
+We additionally can include an **ELSE** statement to perform a function or return a value when none of the **WHEN** statements resolve **TRUE**.
+	    
+Finally, we identify the end of the **CASE** statement with the key word **END** and name the returned field with **AS FIELD_NAME**. If we want spaces in the field name we need to surround it in quotations.
+	    
+```SQL
+SELECT
+	RANK,
+	NAME,
+	CASE
+        	WHEN INSTR(UPPER(REVENUE), 'M') > 0 THEN REPLACE(UPPER(REVENUE), ' MILLION')
+        	WHEN INSTR(UPPER(REVENUE), 'B') > 0 THEN REPLACE(UPPER(REVENUE), ' BILLION')
+        	ELSE NULL
+    	END AS "CLEAN REVENUE",
+	REVENUE
+FROM 
+	INC5000;
+```
+
+If we sort our new **Clean Revenue** column we can see that we successfully removed the word **Billion** & **Million**. However, as mentioned previously we need to multiply the resulting values by **1,000,000,000** & **1,000,000** respectively.
+	    
+To do this we need to convert the column to a number and perform multiplication. Fortunately we can add these steps to our **THEN** statements to perform these steps.
+	    
+	    
+Now let's convert the column to a number we can analyze.
 
 ### Converting to a Number & Scale
 
@@ -145,10 +188,27 @@ The **to_number()** function can utlizing specific formats, but for our purposes
 ```SQL
 SELECT
 	RANK,
-	COMPANY,
-	TO_NUMBER(REPLACE(REPLACE(UPPER(REVENUE), '$'), ' MILLION')) as REVENUE
-FROM 
-	INC500;
+	NAME,
+	CASE
+        	WHEN INSTR(UPPER(REVENUE), 'M') > 0 THEN TO_NUMBER(REPLACE(UPPER(REVENUE), ' MILLION')) 
+        	WHEN INSTR(UPPER(REVENUE), 'B') > 0 THEN TO_NUMBER(REPLACE(UPPER(REVENUE), ' BILLION')) 
+        	ELSE NULL
+    	END AS "CLEAN REVENUE"
+```
+	    
+First you should noticed the **Revenue** column is now right justified, this visually means the values are being stored as number. Now all we need to do is scale the data with multiplication to match the scale previously inlucded as text.
+
+Performation a mathmatical calucation on a numerical field is very simply and only requires we add the expression to the column selection. Copy, paste, and run the following code to scale our data to millions & billions.
+	    
+```SQL
+SELECT
+	RANK,
+	NAME,
+	CASE
+        	WHEN INSTR(UPPER(REVENUE), 'M') > 0 THEN (TO_NUMBER(REPLACE(UPPER(REVENUE), ' MILLION')) *1000000)
+        	WHEN INSTR(UPPER(REVENUE), 'B') > 0 THEN (TO_NUMBER(REPLACE(UPPER(REVENUE), ' BILLION')) *1000000000)
+        	ELSE NULL
+    	END AS "CLEAN REVENUE"
 ```
 
 <figure>
@@ -156,23 +216,11 @@ FROM
     <figcaption style="text-align:center;">Figure 10<figcaption>
 </figure>
 
-First you should noticed the **Revenue** column is now right justified, this visually means the values are being stored as number. Now all we need to do is scale the data with multiplication to match the scale previously inlucded as text.
-
-Performation a mathmatical calucation on a numerical field is very simply and only requires we add the expression to the column selection. Copy, paste, and run the following code to scale our data to millions.
-
-```SQL
-SELECT
-	RANK,
-	COMPANY,
-	TO_NUMBER(REPLACE(REPLACE(UPPER(REVENUE), '$'), ' MILLION')) * 1000000 as REVENUE
-FROM 
-	INC500;
-```
 
 <figure>
     <img src="images/300/11_Scaled.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
     <figcaption style="text-align:center;">Figure 11<figcaption>
 </figure>
 
-We've now successfully loaded our **Inc500** data and cleaned the **Revenue** column dynamically in our query. As Admins we could update the source data, however, it is very common in business that you are provided data "as is" and you may not have the luxury of changing the source data or requesting a change be made. We can however create a view to hold this converion. However, this will be convered in a future lecture.  
+We've now successfully loaded our **Inc5000** data and cleaned the **Revenue** column dynamically in our query. As Admins we could update the source data, however, it is very common in business that you are provided data "as is" and you may not have the luxury of changing the source data or requesting a change be made. We can however create a view to hold this converion. However, this will be convered in a future lecture.  
 
