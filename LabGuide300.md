@@ -144,7 +144,7 @@ To handle this we need what is called a **Case** statement, or as I like to refe
 	    
 ### Case Statements
 	    
-Case statements work similar to **IFS()** statements in Excel and **For Loops** in R & Python. 
+Case statements work similar to **IF** statements in Excel, R, & Python. 
 	    
 The **Case** statement aptly begins with the word **CASE**. It is then follow by **WHEN**, the condition to be checked, **THEN**, & finally the value to return if the condition is true.
 	    
