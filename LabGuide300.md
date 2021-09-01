@@ -195,6 +195,11 @@ SELECT
         	ELSE NULL
     	END AS "CLEAN REVENUE"
 ```
+	   
+<figure>
+    <img src="images/300/10_Conversion.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
+    <figcaption style="text-align:center;">Figure 10<figcaption>
+</figure>
 	    
 First you should noticed the **Revenue** column is now right justified, this visually means the values are being stored as number. Now all we need to do is scale the data with multiplication to match the scale previously inlucded as text.
 
@@ -210,11 +215,6 @@ SELECT
         	ELSE NULL
     	END AS "CLEAN REVENUE"
 ```
-
-<figure>
-    <img src="images/300/10_Conversion.png" style="text-align:center; display: block; margin-left: auto; margin-right: auto; ">
-    <figcaption style="text-align:center;">Figure 10<figcaption>
-</figure>
 
 
 <figure>
