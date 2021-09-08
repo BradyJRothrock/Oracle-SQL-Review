@@ -210,6 +210,7 @@ GROUP BY
 
 The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and the previous years sales called **PY SALES**.
 
+
 ```SQL 
 SELECT
     T.CALENDAR_YEAR,
@@ -222,6 +223,7 @@ GROUP BY
     T.CALENDAR_YEAR;
 ```
 
+
 **LEAD()** allows us to look at a future record. The function takes 3 arguments. 
 
 - The first is the field or group by aggregation that is being carried forward.
@@ -229,6 +231,7 @@ GROUP BY
 - And last is the default value when there is no future row.
 
 The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and the next years sales called **FY SALES**.
+
 
 ```SQL
 SELECT
