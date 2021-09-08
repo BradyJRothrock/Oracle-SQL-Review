@@ -128,9 +128,9 @@ Now we can use a **Sub Query** to help perform a **Pivot** on our dataset. Just 
 
 Following the **Sub Query** we use the keyword **Pivot**. Inside the parenthesis we need to provide 3 things. 
 
-    - First we need an aggregation to be performed in each cell.
-    - Second weuse **FOR** to delclare which field with be spread accross columns.
-    - Lastly we use **IN** to provide a list of columns from the **FOR** field. 
+- First we need an aggregation to be performed in each cell.
+- Second weuse **FOR** to delclare which field with be spread accross columns.
+- Lastly we use **IN** to provide a list of columns from the **FOR** field. 
 
 In this example we've added the field **CALENDAR_MONTH_NUMBER** to use in our **Pivot**. The following query will return the **SUM** of **AMOUNT_SOLD** for January, February, & March of each **CALENDAR_YEAR**. Notice how we don't need a **GROUP BY** statement because the **PIVOT** performs the aggregation for us. 
 
@@ -204,9 +204,9 @@ GROUP BY
 
 **LAG()** allows us to look at a previous record. The function takes 3 arguments. 
 
-    - The first is the field or group by aggregation that is being carried forward.
-    - The second is the offest number of rows to look back.
-    - And last is the default value when there is no preivous row.
+- The first is the field or group by aggregation that is being carried forward.
+- The second is the offest number of rows to look back.
+- And last is the default value when there is no preivous row.
 
 The following query returns for each **CALENDAR_YEAR** the **TOTAL SALES** and the previous years sales called **PY SALES**.
 
@@ -224,9 +224,9 @@ GROUP BY
 
 **LEAD()** allows us to look at a future record. The function takes 3 arguments. 
 
-    - The first is the field or group by aggregation that is being carried forward.
-    - The second is the offest number of rows to look forward.
-    - And last is the default value when there is no future row.
+- The first is the field or group by aggregation that is being carried forward.
+- The second is the offest number of rows to look forward.
+- And last is the default value when there is no future row.
 
 The following query returns for each **CALENDAR_YEAR** the **TOTAL SALES** and the next years sales called **FY SALES**.
 
