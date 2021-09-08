@@ -212,6 +212,7 @@ The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and t
 
 
 ```SQL 
+
 SELECT
     T.CALENDAR_YEAR,
     SUM(S.AMOUNT_SOLD) AS "TOTAL SALES",
@@ -221,6 +222,7 @@ FROM
     JOIN SH.TIMES T ON (S.TIME_ID = T.TIME_ID)
 GROUP BY
     T.CALENDAR_YEAR;
+    
 ```
 
 
@@ -234,6 +236,7 @@ The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and t
 
 
 ```SQL
+
 SELECT
     T.CALENDAR_YEAR,
     SUM(S.AMOUNT_SOLD) AS "TOTAL SALES",
@@ -243,5 +246,6 @@ FROM
     JOIN SH.TIMES T ON (S.TIME_ID = T.TIME_ID)
 GROUP BY
     T.CALENDAR_YEAR;
+    
 ```
 
