@@ -9,7 +9,7 @@ We've seen in the Web SQL Developer tool how we can sort data through clicking c
 Similar to the **Select** statement in the **Order By** we simply provide columns separated by commas. The default is to sort in **Ascending** order but if we want to sort in **Descending** order we simply add **Desc** after the field name.
 
 
-Here we sort by **TIME_ID ASCENDING** and then **CUST_ID DESCENDING**.
+Here we sort by **TIME ID ASCENDING** and then **CUST ID DESCENDING**.
 
 ```SQL
 -- Order By Fields
@@ -21,7 +21,7 @@ ORDER BY
     TIME_ID, CUST_ID DESC;
 ```
 
-Next we'll sort by **CALENDAR_YEAR ASCENDING** in chronological order.
+Next we'll sort by **CALENDAR YEAR ASCENDING** in chronological order.
 
 ```SQL
 -- Order By With Aggregations
@@ -38,7 +38,7 @@ ORDER BY
     T.CALENDAR_YEAR;
 ```
 
-Lastly, we can sort by an aggregated field like the **SUM AMOUNT_SOLD**. Here we need to include the aggregate function, not the aliased name.
+Lastly, we can sort by an aggregated field like the **SUM AMOUNT SOLD**. Here we need to include the aggregate function, not the aliased name.
 
 ```SQL
 -- Order By Aggregations
@@ -57,7 +57,7 @@ ORDER BY
 
 ## Aggregate Conditionals
 
-The **Where** clause is very handy when needing to specify a condition for results, however, it does not work for aggregations. If we wanted to return only years where the **SUM AMOUNT_SOLD** is greater than 24,000,000 using **Where** will return an error.
+The **Where** clause is very handy when needing to specify a condition for results, however, it does not work for aggregations. If we wanted to return only years where the **SUM AMOUNT SOLD** is greater than 24,000,000 using **Where** will return an error.
 
 ```SQL
 SELECT 
@@ -132,7 +132,7 @@ Following the **Sub Query** we use the keyword **Pivot**. Inside the parenthesis
 - Second weuse **FOR** to delclare which field with be spread accross columns.
 - Lastly we use **IN** to provide a list of columns from the **FOR** field. 
 
-In this example we've added the field **CALENDAR_MONTH_NUMBER** to use in our **Pivot**. The following query will return the **SUM** of **AMOUNT_SOLD** for January, February, & March of each **CALENDAR_YEAR**. Notice how we don't need a **GROUP BY** statement because the **PIVOT** performs the aggregation for us. 
+In this example we've added the field **CALENDAR MONTH NUMBER** to use in our **Pivot**. The following query will return the **SUM** of **AMOUNT SOLD** for January, February, & March of each **CALENDAR YEAR**. Notice how we don't need a **GROUP BY** statement because the **PIVOT** performs the aggregation for us. 
 
 ```SQL
 SELECT *
@@ -208,7 +208,7 @@ GROUP BY
 - The second is the offest number of rows to look back.
 - And last is the default value when there is no preivous row.
 
-The following query returns for each **CALENDAR_YEAR** the **TOTAL SALES** and the previous years sales called **PY SALES**.
+The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and the previous years sales called **PY SALES**.
 
 ```SQL 
 SELECT
@@ -228,7 +228,7 @@ GROUP BY
 - The second is the offest number of rows to look forward.
 - And last is the default value when there is no future row.
 
-The following query returns for each **CALENDAR_YEAR** the **TOTAL SALES** and the next years sales called **FY SALES**.
+The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and the next years sales called **FY SALES**.
 
 ```SQL
 SELECT
