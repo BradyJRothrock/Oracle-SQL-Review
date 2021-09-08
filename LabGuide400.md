@@ -211,7 +211,7 @@ GROUP BY
 The following query returns for each **CALENDAR YEAR** the **TOTAL SALES** and the previous years sales called **PY SALES**.
 
 
-```SQL 
+```SQL
 
 SELECT
     T.CALENDAR_YEAR,
