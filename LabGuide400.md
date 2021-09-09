@@ -124,6 +124,55 @@ WHERE SALES > 24000000;
 
 We can also replace the `*` with specific field names from the **Sub Query**.
 
+Another popular use of a **Sub Query** is as part of a Join. This can be done to join a table with a subset of records or a summarized table.
+
+```SQL
+-- Sub Query in Join
+SELECT
+    S.CUST_ID,
+    S.TIME_ID,
+    T.CALENDAR_YEAR,
+    S.AMOUNT_SOLD,
+    X.TOTAL_SALES
+FROM 
+    SH.SALES S
+JOIN
+    SH.TIMES T 
+    ON S.TIME_ID = T.TIME_ID
+JOIN     
+    (SELECT 
+        T.CALENDAR_YEAR,
+        SUM(S.AMOUNT_SOLD) AS TOTAL_SALES
+    FROM SH.SALES S
+        JOIN SH.TIMES T ON (S.TIME_ID = T.TIME_ID)
+    GROUP BY 
+        T.CALENDAR_YEAR) X
+    ON X.CALENDAR_YEAR = T.CALENDAR_YEAR;
+```
+
+The last main use of a **Sub Query** is to create a list of values to be used for an **In** statement.
+
+```SQL
+-- Sub Query In List
+SELECT
+    S.CUST_ID,
+    S.AMOUNT_SOLD,
+    S.PROD_ID
+FROM
+    SH.SALES S
+WHERE  
+    S.CUST_ID IN (
+                  SELECT
+                    S.CUST_ID
+                  FROM
+                    SH.SALES S
+                  GROUP BY
+                    S.CUST_ID
+                  HAVING
+                    SUM(S.AMOUNT_SOLD) > 10000
+                 );
+```
+
 Now we can use a **Sub Query** to help perform a **Pivot** on our dataset. Just like a pivot table in Excel the **Pivot** function allows us to not only calculate aggregate values, but to spread the values across unique columns. The term to describe this is cross-tabulate.
 
 Following the **Sub Query** we use the keyword **Pivot**. Inside the parenthesis we need to provide 3 things. 
